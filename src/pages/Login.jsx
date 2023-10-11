@@ -65,7 +65,8 @@ export const Login = () => {
             })
             navigate('/home', {
                 state: {
-                    logged: true
+                    logged: true,
+                    type: response.data[0].type
                 }
             })
         })

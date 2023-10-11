@@ -22,6 +22,7 @@ export const Home = () => {
   // Estos nos permiten validar si el usuario ha iniciado sesión correctamente
   const { state } = useLocation();
   const navigate = useNavigate();
+  const typeUser = state.type;
 
   useEffect(() => {
     if (state && state.logged) {
@@ -51,15 +52,28 @@ export const Home = () => {
               <img src={Logo} alt="Logo" className='h-40 w-40'/>
             </div>
               <ul className="flex flex-col gap-4">
-                <li>
-                  {/* Se carga la vista para gestionar */}
+                {
+                  (typeUser == 'Administrativo') ?
+                <>
+                    <li>
                     <button 
                       className="flex items-center py-2 pr-[154px] pl-[20px] text-white rounded-xl group bg-amber-950 hover:bg-orange-700 transition-all duration-75"
                       onClick={() => handleButtonClick(<Manage setButtonState={setButtonState}/>)}>
                       <img src={Gestionar} alt="Salir" className="h-4 w-4 text-amber-950"/>
                       <span className="flex-1 ml-2 whitespace-nowrap font-semibold">Gestionar</span>
                     </button>
-                </li>
+                    </li>
+                    <li>
+                        <button 
+                          className="flex items-center py-2 pr-[161px] pl-[20px] text-white rounded-xl group bg-amber-950 hover:bg-orange-700 transition-all duration-75"
+                          onClick={() => handleButtonClick(<Users setButtonState={setButtonState}/>)}>
+                          <img src={Usuarios} alt="Salir" className="h-4 w-4"/>
+                          <span className="flex-1 ml-2 whitespace-nowrap font-semibold">Usuarios</span>
+                        </button>
+                    </li>
+                </> :
+                  <li className='ml-16 font-semibold italic'><p>Vista de usuario</p></li>                
+                }
                 <li>
                     <button className="flex items-center py-2 pr-[142px] pl-[20px] text-white rounded-xl group bg-amber-950 hover:bg-orange-700 transition-all duration-75">
                       <img src={Produccion} alt="Salir" className="h-4 w-4 text-amber-950"/>
@@ -70,14 +84,6 @@ export const Home = () => {
                     <button className="flex items-center py-2 pr-[183px] pl-[20px] text-white rounded-xl group bg-amber-950 hover:bg-orange-700 transition-all duration-75">
                       <img src={Vacas} alt="Salir" className="h-4 w-4 text-amber-950"/>
                       <span className="flex-1 ml-2 whitespace-nowrap font-semibold">Vacas</span>
-                    </button>
-                </li>
-                <li>
-                    <button 
-                      className="flex items-center py-2 pr-[161px] pl-[20px] text-white rounded-xl group bg-amber-950 hover:bg-orange-700 transition-all duration-75"
-                      onClick={() => handleButtonClick(<Users setButtonState={setButtonState}/>)}>
-                      <img src={Usuarios} alt="Salir" className="h-4 w-4"/>
-                      <span className="flex-1 ml-2 whitespace-nowrap font-semibold">Usuarios</span>
                     </button>
                 </li>
                 <li>
