@@ -23,6 +23,7 @@ export const Home = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const typeUser = state.type;
+  const userName = state.userName;
 
   useEffect(() => {
     if (state && state.logged) {
@@ -40,6 +41,15 @@ export const Home = () => {
   const handleButtonClick = (component) => {
     setButtonState(component);
   };
+
+  // Metodo para salir del sistema
+  const onLogout = () => {
+    navigate('/logout', {
+      state: {
+        userName: userName
+      }
+    });
+  }
 
   return (
     <>
@@ -87,9 +97,11 @@ export const Home = () => {
                     </button>
                 </li>
                 <li>
-                    <button className="flex items-center justify-center p-2 pr-[180px] pl-[20px] text-amber-950 rounded-xl group hover:bg-slate-300 transition-all duration-75">
-                      <img src={Salir} alt="Salir" className="h-4 w-4"/>
-                      <span className="flex-1 ml-2 whitespace-nowrap font-semibold">Salir</span>
+                    <button 
+                        className="flex items-center justify-center p-2 pr-[180px] pl-[20px] text-amber-950 rounded-xl group hover:bg-slate-300 transition-all duration-75"
+                        onClick={onLogout}>
+                        <img src={Salir} alt="Salir" className="h-4 w-4"/>
+                        <span className="flex-1 ml-2 whitespace-nowrap font-semibold">Salir</span>
                     </button>
                 </li>
               </ul>
