@@ -27,7 +27,7 @@ export const Manage = (props) => {
     // Obtenemos los valores de los atributos del "formState"
     const { cowCode, cowName, cowBreed, cowDate, cowWeight, cowChilds } = formState
 
-    // Función que me permite setear los input del "Form"
+    // Función que nos permite setear los input del "formState"
     const resetFormState = () => {
         setFormState(cowForm)
     }

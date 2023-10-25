@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Welcome } from '../components/Welcome';
 import { Manage } from '../components/Manage';
 import { Users } from '../components/Users';
+import { Production } from '../components/Production';
 
 // Componente
 export const Home = () => {
@@ -85,7 +86,9 @@ export const Home = () => {
                   <li className='ml-16 font-semibold italic'><p>Vista de usuario</p></li>                
                 }
                 <li>
-                    <button className="flex items-center py-2 pr-[142px] pl-[20px] text-white rounded-xl group bg-amber-950 hover:bg-orange-700 transition-all duration-75">
+                    <button 
+                      className="flex items-center py-2 pr-[142px] pl-[20px] text-white rounded-xl group bg-amber-950 hover:bg-orange-700 transition-all duration-75"
+                      onClick={() => handleButtonClick(<Production setButtonState={setButtonState}/>)}>
                       <img src={Produccion} alt="Salir" className="h-4 w-4 text-amber-950"/>
                       <span className="flex-1 ml-2 whitespace-nowrap font-semibold">Producción</span>
                     </button>
