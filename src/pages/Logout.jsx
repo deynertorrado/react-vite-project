@@ -2,14 +2,27 @@
 import Logo from '../assets/LoginAssets/Logo.svg';
 import OrangeCow from '../assets/LoginAssets/OrangeCow.png';
 
-// React
+// Importaciones de React
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const Logout = () => {
+    // ------------------------ Autenticación ------------------------
+    // Recibimos el atributo de "state" y usamos "navigate"
+    // Estos nos permiten validar si el usuario ha estado en el sistema con anterioridad
     const { state } = useLocation();
     const navigate = useNavigate();
-    const userName = state.userName;
+    let userName = (state == null) ? 'Unknow' : state.userName;
 
+    // Hacemos uso de useEffect para validar al autenticación del usuario
+    useEffect(() => {
+        if (state == null) {
+        // En caso de que el usuario no esté autenticado lo redirigimos al Login
+        navigate('/');
+        }
+    }, [true]);
+
+    // Este método nos retorna al "Login"
     const onLogin = () => {
         navigate('/');
     }

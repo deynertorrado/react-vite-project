@@ -6,44 +6,45 @@ import Produccion from '../assets/HomeAssets/grafico-histograma.svg';
 import Gestionar from '../assets/HomeAssets/comprobacion-de-la-lista-del-portapapeles.svg';
 import Logo from '../assets/HomeAssets/Logo.svg';
 
-// React
+// Importaciones de React
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-// Componentes
+// Importación de Componentes
 import { Welcome } from '../components/Welcome';
 import { Manage } from '../components/Manage';
 import { Users } from '../components/Users';
 import { Production } from '../components/Production';
 
-// Componente
+// Componente Principal
 export const Home = () => {
 
-  // Recibimos los atributos "state" y usamos "navegate"
+  // ------------------------ Autenticación ------------------------
+  // Recibimos los atributos de "state" y usamos "navigate"
   // Estos nos permiten validar si el usuario ha iniciado sesión correctamente
-  const { state } = useLocation();
   const navigate = useNavigate();
-  const typeUser = state.type;
-  const userName = state.userName;
+  const { state } = useLocation();
+  let userType = (state == null) ? 'Unknow' : state.userType;
+  let userName = (state == null) ? 'Unknow' : state.userName;
 
+  // Hacemos uso de useEffect para validar al autenticación del usuario
   useEffect(() => {
-    if (state && state.logged) {
-      // El usuario está autenticado, todo está bien
-    } else {
-      // El usuario no está autenticado, redirigir al Login
+    if (state == null) {
+      // En caso de que el usuario no esté autenticado lo redirigimos al Login
       navigate('/');
     }
-  }, [state, navigate]);
+  }, [true]);
 
-  // Cambiar ventana del Home
+  // -------------------- Cambio de Vistas --------------------
+  // Hacemos uso del useState para ir cambiando entre componentes de "Pages"
   const [buttonState, setButtonState] = useState(<Welcome/>)
 
-  // Método para cambiar la vista del Home dependiendo del botón
+  // Método para cambiar la vista del "Home" dependiendo del botón en el que se haga click
   const handleButtonClick = (component) => {
     setButtonState(component);
   };
 
-  // Metodo para salir del sistema
+  // Método para salir del sistema
   const onLogout = () => {
     navigate('/logout', {
       state: {
@@ -64,7 +65,8 @@ export const Home = () => {
             </div>
               <ul className="flex flex-col gap-4">
                 {
-                  (typeUser == 'Administrativo') ?
+                  // Dependiendo del tipo de usuario ocultamos algunos accesos para gestionar la información
+                  (userType == 'Administrativo') ?
                 <>
                     <li>
                     <button 

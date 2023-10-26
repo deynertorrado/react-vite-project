@@ -2,30 +2,31 @@
 import Logo from '../assets/LoginAssets/Logo.svg';
 import OrangeCow from '../assets/LoginAssets/OrangeCow.png';
 
-// React
+// Importaciones de React
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Librerías
+// Librerías Externas
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
-// Componente
+// Componente Principal
 export const Login = () => {
 
-    // Estado Inicial del "loginState"
+    // Inicializamos el "navigate" (router)
+    const navigate = useNavigate();
+    
+    // ---------- Proceso para tomar los datos e Iniciar Sesión ----------
+    // Estado Inicial del "loginUser"
     const loginUser = {
         username: '',
         password: ''
     }
 
-    // Inicializamos el "navegador" (router)
-    const navigate = useNavigate();
-    
-    // Manejo de estado del "loginState"
+    // Manejo de estado del "loginUser"
     const [loginState, setLoginState] = useState(loginUser);
 
-    // Obtenemos los valores de los input del Login
+    // Obtenemos los valores de los input del "LoginUser"
     const onInputChange = ({target}) => {
         const { name, value } = target;
         setLoginState({
@@ -34,20 +35,20 @@ export const Login = () => {
         });
     }
     
-    // Obtenemos los valores de los atributos del "loginState"
-    const {username, password} = loginState
+    // Obtenemos los valores de los atributos del "LoginUser"
+    const { username, password } = loginState
 
-    // Función que me permite setear los input del "Login"
+    // Función que me permite setear los input del "LoginUser"
     const resetLoginState = () => {
         setLoginState(loginUser)
     }
 
-    // Enviamos los valores del "loginState" a la API para validarlos
+    // ---------------- Proceso de Validación del Usuario ----------------
+    // Enviamos los valores del "loginUser" a la API para validarlos
     const onSubmitForm = (e) => {
         e.preventDefault()
         axios.post('https://exps-mvc-api.vercel.app/api/login', {
-            username: username,
-            password: password
+            ...loginState
         }, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -55,7 +56,9 @@ export const Login = () => {
             }
         })
         .then((response) => {
+            // Si la respuesta es correcta, obtenemos el "user" y el "type" de la request
             const user = response.data[0].name;
+            const type = response.data[0].type;
             Swal.fire({
                 position: 'center',
                 icon: 'success',
@@ -63,15 +66,17 @@ export const Login = () => {
                 showConfirmButton: false,
                 timer: 3000
             })
+            // Enviamos el "user" y el "type" del Usuario al "Home"
             navigate('/home', {
                 state: {
                     logged: true,
-                    type: response.data[0].type,
+                    userType: type,
                     userName: user
                 }
             })
         })
         .catch((error) => {
+            // Si la respuesta es errónea, retornamos un popup de advertencia
             Swal.fire({
                 position: 'center',
                 icon: 'error',
@@ -80,6 +85,7 @@ export const Login = () => {
                 timer: 3000
               })
         });
+        // Seteamos los inputs en cualquiera de los casos
         resetLoginState()
     }
 
