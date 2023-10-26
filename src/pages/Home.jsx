@@ -67,7 +67,7 @@ export const Home = () => {
                 {
                   // Dependiendo del tipo de usuario ocultamos algunos accesos para gestionar la información
                   (userType == 'Administrativo') ?
-                <>
+                  <>
                     <li>
                     <button 
                       className="flex items-center py-2 pr-[154px] pl-[20px] text-white rounded-xl group bg-amber-950 hover:bg-orange-700 transition-all duration-75"
@@ -84,8 +84,8 @@ export const Home = () => {
                           <span className="flex-1 ml-2 whitespace-nowrap font-semibold">Usuarios</span>
                         </button>
                     </li>
-                </> :
-                  <li className='ml-16 font-semibold italic'><p>Vista de usuario</p></li>                
+                  </> :
+                    <li className='ml-16 font-semibold italic'><p>Vista de usuario</p></li>                
                 }
                 <li>
                     <button 

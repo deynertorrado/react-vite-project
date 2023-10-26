@@ -1,18 +1,20 @@
 // Imagenes
 import editarImg from '../assets/HomeAssets/edit.svg';
 
-// React
+// Importació de React
 import { useState, useEffect } from "react";
 
-// Librerías
+// Librerías Externas
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
-// Componentes
+// Importación de Componentes
 import { Welcome } from "./Welcome";
 
+// Componente Principal
 export const Users = (props) => {
 
+    // ------------- Proceso para tomar los datos -------------
     // Estado Inicial del "userForm"
     const userForm = {
         userName: '',
@@ -21,18 +23,18 @@ export const Users = (props) => {
         userType: ''
     }
     
-    // Manejo de estado del "formState"
+    // Manejo de estado del "userForm"
     const [formState, setFormState] = useState(userForm);
 
-    // Obtenemos los valores de los atributos del "formState"
+    // Obtenemos los valores de los atributos del "userForm"
     const { userName, user, userPassword, userType } = formState
 
-    // Función que me permite setear los input del "Form"
+    // Función que me permite setear los inputs del "userForm"
     const resetFormState = () => {
         setFormState(userForm)
     }
 
-    // Obtenemos los valores de los input del "Form"
+    // Obtenemos los valores de los inputs del "userForm"
     const onInputChange = ({target}) => {
         const { name, value } = target;
         setFormState({
@@ -41,7 +43,8 @@ export const Users = (props) => {
         });
     }
 
-    // Enviamos los datos del "formState" a la API para validarlos
+    // ------------ Proceso para enviar, validar y almacenar los datos -------------
+    // Enviamos los datos del "userForm" a la API para validarlos y guardar un nuevo Usuario
     const onSubmitForm = (e) => {
         e.preventDefault()
         const verificarCampos = Object.values(formState).every(value  => value !== '')
@@ -84,8 +87,11 @@ export const Users = (props) => {
         resetFormState()
     }
 
-    // ---------------- Consultar API de los usuarios ----------------
+    // ------------- Proceso para traer los datos de los Usuarios en la API -------------
+    // Definimos los estados para almacenar los Usuarios
     const [dataUsers, setDataUsers] = useState([])
+    const [userId, setUserId] = useState(null)
+    
     useEffect(() => {
         axios.get('https://exps-mvc-api.vercel.app/api/users')
         .then(res => {
@@ -96,12 +102,11 @@ export const Users = (props) => {
         })
     }, [dataUsers]) // Le pasamos el 'dataUsers' como dependencia para que se actualice
 
-    // --------------- Editar datos de los usuarios -----------------
-    const [userId, setUserId] = useState(null)
+    // Definimos un Handler para enviar los datos del usuario seleccionado a los inputs
     const onEditUser = (ID) => {
-        // Filtramos los datos mediante el id
+        // Filtramos los datos mediante el ID
         const selectedUser = dataUsers.find(user => user.id === ID);
-        // Pasamos el id del usuario seleccionado
+        // Pasamos el ID del usuario seleccionado
         setUserId(ID)
         console.log('Información de la fila seleccionada:', selectedUser);
         // Enviamos los datos al campo del formulario 
@@ -113,7 +118,7 @@ export const Users = (props) => {
         })
     }
 
-    // ---------------- Actualizar datos en la DB --------------------
+    // ------------- Proceso para actualizar los datos en la API -------------
     // Cuadro de diálogo de actualización
     const onUpdateUser = (e) => {
         const verificarCampos = Object.values(formState).every(value => value !== '')
@@ -141,6 +146,7 @@ export const Users = (props) => {
         }
     }
 
+    // Enviamos la request para actualizar los datos
     const UpdateUser = (e) => {
         e.preventDefault();
         axios.put('https://exps-mvc-api.vercel.app/api/users', {
@@ -174,7 +180,7 @@ export const Users = (props) => {
         resetFormState()
     }
 
-    // ---------------- Eliminar datos en la DB --------------------
+    // ------------- Proceso para eliminar datos en la API -------------
     // Cuadro de diálogo de eliminación
     const onDeleteUser = (e) => {
         const verificarCampos = Object.values(formState).every(value => value !== '')
@@ -202,6 +208,7 @@ export const Users = (props) => {
         }
     }
     
+    // Enviamos la request para eliminar datos
     const deleteUser = (e) => {
         e.preventDefault();
         axios.delete(`https://exps-mvc-api.vercel.app/api/users/${userId}`, {
@@ -231,7 +238,7 @@ export const Users = (props) => {
         resetFormState()
     }
 
-    // ---------------- Regresamos a la vista principal --------------------
+    // Método que nos permite regresar a la vista principal
     const changeView = () => {
         props.setButtonState(<Welcome />)
     }
@@ -333,21 +340,21 @@ export const Users = (props) => {
                                 </thead>
                                 <tbody>
                                 {
-                                dataUsers.map(user => {
-                                    return (
-                                        <tr className="bg-white border-b" key={user.id}>
-                                            <th scope="row" className="px-6 py-4 text-gray-900 whitespace-nowrap">{user.name}</th>
-                                            <td className="px-6 py-4">{user.type}</td>
-                                            <td className="px-6 py-4">
-                                                <button 
-                                                    className="font-semibold shadow-md text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-md px-2 py-2 ml-2 mb-1 focus:outline-none"
-                                                    onClick={() => onEditUser(user.id)}>
-                                                    <img src={editarImg} alt="Editar" className='h-[15px] w-[15px]'/>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
+                                    dataUsers.map(user => {
+                                        return (
+                                            <tr className="bg-white border-b" key={user.id}>
+                                                <th scope="row" className="px-6 py-4 text-gray-900 whitespace-nowrap">{user.name}</th>
+                                                <td className="px-6 py-4">{user.type}</td>
+                                                <td className="px-6 py-4">
+                                                    <button 
+                                                        className="font-semibold shadow-md text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-md px-2 py-2 ml-2 mb-1 focus:outline-none"
+                                                        onClick={() => onEditUser(user.id)}>
+                                                        <img src={editarImg} alt="Editar" className='h-[15px] w-[15px]'/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
                                 }
                                 </tbody>
                             </table>

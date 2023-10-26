@@ -1,16 +1,17 @@
-// React
+// Importació de React
 import { useState, useEffect } from "react";
 
-// Librerías
+// Librerías Externas
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
-// Componentes
+// Importación de Componente
 import { Welcome } from "./Welcome";
 
-// Componente
+// Componente Principal
 export const Manage = (props) => {
 
+    // ------------- Proceso para tomar los datos -------------
     // Estado Inicial del "cowForm"
     const cowForm = {
         cowCode: '',
@@ -21,18 +22,18 @@ export const Manage = (props) => {
         cowChilds: '',
     }
     
-    // Manejo de estado del "formState"
+    // Manejo de estado del "cowForm"
     const [formState, setFormState] = useState(cowForm);
 
-    // Obtenemos los valores de los atributos del "formState"
+    // Obtenemos los valores de los atributos del "cowForm"
     const { cowCode, cowName, cowBreed, cowDate, cowWeight, cowChilds } = formState
 
-    // Función que nos permite setear los input del "formState"
+    // Función que nos permite setear los inputs del "cowForm"
     const resetFormState = () => {
         setFormState(cowForm)
     }
 
-    // Obtenemos los valores de los input del "Form"
+    // Obtenemos los valores de los inputs del "cowForm"
     const onInputChange = ({target}) => {
         const { name, value } = target;
         setFormState({
@@ -41,7 +42,8 @@ export const Manage = (props) => {
         });
     }
 
-    // Enviamos los datos del "formState" a la API para validarlos
+    // ------------ Proceso para enviar, validar y almacenar los datos -------------
+    // Enviamos los datos del "cowForm" a la API para validarlos y guardar una nueva Vaquita
     const onSubmitForm = (e) => {
         e.preventDefault()
         const verificarCampos = Object.values(formState).every(value  => value !== '')
@@ -84,21 +86,31 @@ export const Manage = (props) => {
         resetFormState()
     }
 
-    // ---------------- Filtrado de datos en la DB --------------------
-
-    // Definimos los estados para los filtros de las vacas
+    // ------------- Proceso para traer los datos de las Vaquitas en la API -------------
+    // Definimos los estados para almacenar las Vaquitas
     const [cowData, setCowData] = useState([]);
     const [cowSelected, setCowSelected] = useState('');
 
-    // Guardamos el identificador de las vacas
+    // State para guardar el ID de la vaquita que seleccionamos
     const [cowID, setCowID] = useState(0)
 
-    // Guardamos la vaca que seleccionamos
+    // Método que nos permite guardar el nombre de la vaquita que seleccionamos
     const handleSelectCow = (event) => {
         setCowSelected(event.target.value);
     }
+
+    // Traemos los datos de las vaquitas en la API
+    useEffect(() => {
+        axios.get('https://exps-mvc-api.vercel.app/api/cows')
+            .then(response => {
+                setCowData(response.data);
+            })
+            .catch(error => {
+                console.error('Error al obtener los resultados:', error);
+            });
+    }, [handleSelectCow]);
     
-    // Traemos los datos de la vaca que seleccionemos al "formState"
+    // Enviamos los datos de la vaquita seleccionada a los inputs
     const handleCowData = (event) => {
         event.preventDefault();
         // Filtramos los datos de la vaca seleccionada
@@ -118,19 +130,7 @@ export const Manage = (props) => {
         setCowSelected('')
     }
 
-    // Traemos los datos de las vacas mediante la API en Supabase
-    useEffect(() => {
-        axios.get('https://exps-mvc-api.vercel.app/api/cows')
-            .then(response => {
-                setCowData(response.data);
-            })
-            .catch(error => {
-                console.error('Error al obtener los resultados:', error);
-            });
-    }, [handleSelectCow]);
-
-    // ---------------- Actualizar datos en la DB --------------------
-
+    // ------------- Proceso para actualizar los datos en la API -------------
     // Cuadro de diálogo de actualización
     const onUpdateCow = (e) => {
         const verificarCampos = Object.values(formState).every(value => value !== '')
@@ -158,6 +158,7 @@ export const Manage = (props) => {
         }
     }
 
+    // Enviamos la request para actualizar los datos
     const UpdateCow = (e) => {
         e.preventDefault();
         axios.put('https://exps-mvc-api.vercel.app/api/cows', {
@@ -191,8 +192,7 @@ export const Manage = (props) => {
         resetFormState()
     }
 
-    // ---------------- Eliminar datos en la DB --------------------
-
+    // ------------- Proceso para eliminar datos en la API -------------
     // Cuadro de diálogo de eliminación
     const onDeleteCow = (e) => {
         const verificarCampos = Object.values(formState).every(value => value !== '')
@@ -220,6 +220,7 @@ export const Manage = (props) => {
         }
     }
     
+    // Enviamos la request para eliminar datos
     const deleteCow = (e) => {
         e.preventDefault();
         axios.delete(`https://exps-mvc-api.vercel.app/api/cows/${cowID}`, {
@@ -249,7 +250,7 @@ export const Manage = (props) => {
         resetFormState()
     }
 
-    // ---------------- Regresamos a la vista principal --------------------
+    // Método que nos permite regresar a la vista principal
     const changeView = () => {
         props.setButtonState(<Welcome />)
     }
@@ -276,9 +277,9 @@ export const Manage = (props) => {
                         onChange={handleSelectCow}
                         required>
                     <option value="">Selecciona una vaca...</option>
-                    {cowData.map(cowData => (
-                        <option key={cowData.id}>{cowData.cow_name}</option>
-                    ))}
+                        {cowData.map(cowData => (
+                            <option key={cowData.id}>{cowData.cow_name}</option>
+                        ))}
                     </select>
                     <button type="submit" className="font-semibold shadow-md text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-md px-10 py-3 ml-2 mb-1 focus:outline-none">Enviar</button>
                 </form>
