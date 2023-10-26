@@ -1,6 +1,11 @@
+// Importaciones de React
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+
+// Importación de Componente
 import { App } from './App.jsx'
+
+// Importación de Tailwind CSS
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
