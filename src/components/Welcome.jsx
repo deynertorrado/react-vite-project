@@ -2,8 +2,9 @@
 import imagenBienvenida from '../assets/HomeAssets/background-image.png';
 import vaca from '../assets/HomeAssets/cow.png';
 
-// Componente
+// Componente Principal
 export const Welcome = () => {
+  // Retornamos la vista de Bienvenida
   return (
     <div className='flex flex-col gap-11'>
         <div>
